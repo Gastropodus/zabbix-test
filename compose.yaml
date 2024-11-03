@@ -1,0 +1,533 @@
+version: '3.1'
+services:
+  zabbix-server-db_h_srv_h:
+    image: zabbix/zabbix-server-pgsql:latest
+    container_name: zabbix_server_db_h_srv_h
+    restart: unless-stopped
+    networks:
+      - zabbix_db_h_srv_h
+    volumes:
+      - /zabbix_data/db_h_srv_h/server:/var/lib/zabbix
+    environment:
+      DB_SERVER_HOST: zabbix-postgres-db_h_srv_h
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      ZBX_JAVAGATEWAY: zabbix-java-gateway-db_h_srv_h
+    depends_on:
+      - zabbix-postgres-db_h_srv_h
+
+  zabbix-postgres-db_h_srv_h:
+    image: postgres:13
+    container_name: zabbix_database_db_h_srv_h
+    restart: unless-stopped
+    networks:
+      - zabbix_db_h_srv_h
+    volumes:
+      - /zabbix_data/db_h_srv_h/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      POSTGRES_DB: zabbix
+  zabbix-web-db_h_srv_h:
+    image: zabbix/zabbix-web-nginx-pgsql:latest
+    container_name: zabbix_web_db_h_srv_h
+    restart: unless-stopped
+    networks:
+      - zabbix_db_h_srv_h
+    ports:
+      - 8080:8080
+    environment:
+      DB_SERVER_HOST: zabbix-postgres-db_h_srv_h
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      ZBX_SERVER_NAME: Zabbix Server db_h_srv_h
+    depends_on:
+      - zabbix-server-db_h_srv_h
+
+  zabbix-java-gateway-db_h_srv_h:
+    image: zabbix/zabbix-java-gateway:latest
+    container_name: zabbix_java_db_h_srv_h
+    restart: unless-stopped
+    networks:
+      - zabbix_db_h_srv_h
+
+  zabbix-server-db_n_srv_n:
+    image: zabbix/zabbix-server-pgsql:latest
+    container_name: zabbix_server_db_n_srv_n
+    restart: unless-stopped
+    networks:
+      - zabbix_db_n_srv_n
+    volumes:
+      - /zabbix_data/noname/db_n_srv_n/server:/var/lib/zabbix
+    environment:
+      DB_SERVER_HOST: zabbix-postgres-db_n_srv_n
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      ZBX_JAVAGATEWAY: zabbix-java-gateway-db_n_srv_n
+    depends_on:
+      - zabbix-postgres-db_n_srv_n
+
+  zabbix-postgres-db_n_srv_n:
+    image: postgres:13
+    container_name: zabbix_database_db_n_srv_n
+    restart: unless-stopped
+    networks:
+      - zabbix_db_n_srv_n
+    volumes:
+      - /zabbix_data/noname/db_n_srv_n/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      POSTGRES_DB: zabbix
+  zabbix-web-db_n_srv_n:
+    image: zabbix/zabbix-web-nginx-pgsql:latest
+    container_name: zabbix_web_db_n_srv_n
+    restart: unless-stopped
+    networks:
+      - zabbix_db_n_srv_n
+    ports:
+      - 8081:8080
+    environment:
+      DB_SERVER_HOST: zabbix-postgres-db_n_srv_n
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      ZBX_SERVER_NAME: Zabbix Server db_n_srv_n
+    depends_on:
+      - zabbix-server-db_n_srv_n
+
+  zabbix-java-gateway-db_n_srv_n:
+    image: zabbix/zabbix-java-gateway:latest
+    container_name: zabbix_java_db_n_srv_n
+    restart: unless-stopped
+    networks:
+      - zabbix_db_n_srv_n
+
+  zabbix-server-db_d_srv_d:
+    image: zabbix/zabbix-server-pgsql:latest
+    container_name: zabbix_server_db_d_srv_d
+    restart: unless-stopped
+    networks:
+      - zabbix_db_d_srv_d
+    volumes:
+      - /zabbix_data/dexp/db_d_srv_d/server:/var/lib/zabbix
+    environment:
+      DB_SERVER_HOST: zabbix-postgres-db_d_srv_d
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      ZBX_JAVAGATEWAY: zabbix-java-gateway-db_d_srv_d
+    depends_on:
+      - zabbix-postgres-db_d_srv_d
+
+  zabbix-postgres-db_d_srv_d:
+    image: postgres:13
+    container_name: zabbix_database_db_d_srv_d
+    restart: unless-stopped
+    networks:
+      - zabbix_db_d_srv_d
+    volumes:
+      - /zabbix_data/dexp/db_d_srv_d/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      POSTGRES_DB: zabbix
+  zabbix-web-db_d_srv_d:
+    image: zabbix/zabbix-web-nginx-pgsql:latest
+    container_name: zabbix_web_db_d_srv_d
+    restart: unless-stopped
+    networks:
+      - zabbix_db_d_srv_d
+    ports:
+      - 8082:8080
+    environment:
+      DB_SERVER_HOST: zabbix-postgres-db_d_srv_d
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      ZBX_SERVER_NAME: Zabbix Server db_d_srv_d
+    depends_on:
+      - zabbix-server-db_d_srv_d
+
+  zabbix-java-gateway-db_d_srv_d:
+    image: zabbix/zabbix-java-gateway:latest
+    container_name: zabbix_java_db_d_srv_d
+    restart: unless-stopped
+    networks:
+      - zabbix_db_d_srv_d
+
+  zabbix-server-db_r_srv_r:
+    image: zabbix/zabbix-server-pgsql:latest
+    container_name: zabbix_server_db_r_srv_r
+    restart: unless-stopped
+    networks:
+      - zabbix_db_r_srv_r
+    volumes:
+      - /zabbix_data/radeon/db_r_srv_r/server:/var/lib/zabbix
+    environment:
+      DB_SERVER_HOST: zabbix-postgres-db_r_srv_r
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      ZBX_JAVAGATEWAY: zabbix-java-gateway-db_r_srv_r
+    depends_on:
+      - zabbix-postgres-db_r_srv_r
+
+  zabbix-postgres-db_r_srv_r:
+    image: postgres:13
+    container_name: zabbix_database_db_r_srv_r
+    restart: unless-stopped
+    networks:
+      - zabbix_db_r_srv_r
+    volumes:
+      - /zabbix_data/radeon/db_r_srv_r/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      POSTGRES_DB: zabbix
+  zabbix-web-db_r_srv_r:
+    image: zabbix/zabbix-web-nginx-pgsql:latest
+    container_name: zabbix_web_db_r_srv_r
+    restart: unless-stopped
+    networks:
+      - zabbix_db_r_srv_r
+    ports:
+      - 8083:8080
+    environment:
+      DB_SERVER_HOST: zabbix-postgres-db_r_srv_r
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      ZBX_SERVER_NAME: Zabbix Server db_r_srv_r
+    depends_on:
+      - zabbix-server-db_r_srv_r
+
+  zabbix-java-gateway-db_r_srv_r:
+    image: zabbix/zabbix-java-gateway:latest
+    container_name: zabbix_java_db_r_srv_r
+    restart: unless-stopped
+    networks:
+      - zabbix_db_r_srv_r
+
+  zabbix-server-db_h_srv_n:
+    image: zabbix/zabbix-server-pgsql:latest
+    container_name: zabbix_server_db_h_srv_n
+    restart: unless-stopped
+    networks:
+      - zabbix_db_h_srv_n
+    volumes:
+      - /zabbix_data/noname/db_h_srv_n/server:/var/lib/zabbix
+    environment:
+      DB_SERVER_HOST: zabbix-postgres-db_h_srv_n
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      ZBX_JAVAGATEWAY: zabbix-java-gateway-db_h_srv_n
+    depends_on:
+      - zabbix-postgres-db_h_srv_n
+
+  zabbix-postgres-db_h_srv_n:
+    image: postgres:13
+    container_name: zabbix_database_db_h_srv_n
+    restart: unless-stopped
+    networks:
+      - zabbix_db_h_srv_n
+    volumes:
+      - /zabbix_data/db_h_srv_n/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      POSTGRES_DB: zabbix
+  zabbix-web-db_h_srv_n:
+    image: zabbix/zabbix-web-nginx-pgsql:latest
+    container_name: zabbix_web_db_h_srv_n
+    restart: unless-stopped
+    networks:
+      - zabbix_db_h_srv_n
+    ports:
+      - 8084:8080
+    environment:
+      DB_SERVER_HOST: zabbix-postgres-db_h_srv_n
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      ZBX_SERVER_NAME: Zabbix Server db_h_srv_n
+    depends_on:
+      - zabbix-server-db_h_srv_n
+
+  zabbix-java-gateway-db_h_srv_n:
+    image: zabbix/zabbix-java-gateway:latest
+    container_name: zabbix_java_db_h_srv_n
+    restart: unless-stopped
+    networks:
+      - zabbix_db_h_srv_n
+
+  zabbix-server-db_h_srv_d:
+    image: zabbix/zabbix-server-pgsql:latest
+    container_name: zabbix_server_db_h_srv_d
+    restart: unless-stopped
+    networks:
+      - zabbix_db_h_srv_d
+    volumes:
+      - /zabbix_data/dexp/db_h_srv_d/server:/var/lib/zabbix
+    environment:
+      DB_SERVER_HOST: zabbix-postgres-db_h_srv_d
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      ZBX_JAVAGATEWAY: zabbix-java-gateway-db_h_srv_d
+    depends_on:
+      - zabbix-postgres-db_h_srv_d
+
+  zabbix-postgres-db_h_srv_d:
+    image: postgres:13
+    container_name: zabbix_database_db_h_srv_d
+    restart: unless-stopped
+    networks:
+      - zabbix_db_h_srv_d
+    volumes:
+      - /zabbix_data/db_h_srv_d/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      POSTGRES_DB: zabbix
+  zabbix-web-db_h_srv_d:
+    image: zabbix/zabbix-web-nginx-pgsql:latest
+    container_name: zabbix_web_db_h_srv_d
+    restart: unless-stopped
+    networks:
+      - zabbix_db_h_srv_d
+    ports:
+      - 8085:8080
+    environment:
+      DB_SERVER_HOST: zabbix-postgres-db_h_srv_d
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      ZBX_SERVER_NAME: Zabbix Server db_h_srv_d
+    depends_on:
+      - zabbix-server-db_h_srv_d
+
+  zabbix-java-gateway-db_h_srv_d:
+    image: zabbix/zabbix-java-gateway:latest
+    container_name: zabbix_java_db_h_srv_d
+    restart: unless-stopped
+    networks:
+      - zabbix_db_h_srv_d
+
+  zabbix-server-db_h_srv_r:
+    image: zabbix/zabbix-server-pgsql:latest
+    container_name: zabbix_server_db_h_srv_r
+    restart: unless-stopped
+    networks:
+      - zabbix_db_h_srv_r
+    volumes:
+      - /zabbix_data/radeon/db_h_srv_r/server:/var/lib/zabbix
+    environment:
+      DB_SERVER_HOST: zabbix-postgres-db_h_srv_r
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      ZBX_JAVAGATEWAY: zabbix-java-gateway-db_h_srv_r
+    depends_on:
+      - zabbix-postgres-db_h_srv_r
+
+  zabbix-postgres-db_h_srv_r:
+    image: postgres:13
+    container_name: zabbix_database_db_h_srv_r
+    restart: unless-stopped
+    networks:
+      - zabbix_db_h_srv_r
+    volumes:
+      - /zabbix_data/db_h_srv_r/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      POSTGRES_DB: zabbix
+  zabbix-web-db_h_srv_r:
+    image: zabbix/zabbix-web-nginx-pgsql:latest
+    container_name: zabbix_web_db_h_srv_r
+    restart: unless-stopped
+    networks:
+      - zabbix_db_h_srv_r
+    ports:
+      - 8086:8080
+    environment:
+      DB_SERVER_HOST: zabbix-postgres-db_h_srv_r
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      ZBX_SERVER_NAME: Zabbix Server db_h_srv_r
+    depends_on:
+      - zabbix-server-db_h_srv_r
+
+  zabbix-java-gateway-db_h_srv_r:
+    image: zabbix/zabbix-java-gateway:latest
+    container_name: zabbix_java_db_h_srv_r
+    restart: unless-stopped
+    networks:
+      - zabbix_db_h_srv_r
+
+  zabbix-server-db_n_srv_h:
+    image: zabbix/zabbix-server-pgsql:latest
+    container_name: zabbix_server_db_n_srv_h
+    restart: unless-stopped
+    networks:
+      - zabbix_db_n_srv_h
+    volumes:
+      - /zabbix_data/db_n_srv_h/server:/var/lib/zabbix
+    environment:
+      DB_SERVER_HOST: zabbix-postgres-db_n_srv_h
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      ZBX_JAVAGATEWAY: zabbix-java-gateway-db_n_srv_h
+    depends_on:
+      - zabbix-postgres-db_n_srv_h
+
+  zabbix-postgres-db_n_srv_h:
+    image: postgres:13
+    container_name: zabbix_database_db_n_srv_h
+    restart: unless-stopped
+    networks:
+      - zabbix_db_n_srv_h
+    volumes:
+      - /zabbix_data/noname/db_n_srv_h/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      POSTGRES_DB: zabbix
+  zabbix-web-db_n_srv_h:
+    image: zabbix/zabbix-web-nginx-pgsql:latest
+    container_name: zabbix_web_db_n_srv_h
+    restart: unless-stopped
+    networks:
+      - zabbix_db_n_srv_h
+    ports:
+      - 8087:8080
+    environment:
+      DB_SERVER_HOST: zabbix-postgres-db_n_srv_h
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      ZBX_SERVER_NAME: Zabbix Server db_n_srv_h
+    depends_on:
+      - zabbix-server-db_n_srv_h
+
+  zabbix-java-gateway-db_n_srv_h:
+    image: zabbix/zabbix-java-gateway:latest
+    container_name: zabbix_java_db_n_srv_h
+    restart: unless-stopped
+    networks:
+      - zabbix_db_n_srv_h
+
+  zabbix-server-db_d_srv_h:
+    image: zabbix/zabbix-server-pgsql:latest
+    container_name: zabbix_server_db_d_srv_h
+    restart: unless-stopped
+    networks:
+      - zabbix_db_d_srv_h
+    volumes:
+      - /zabbix_data/db_d_srv_h/server:/var/lib/zabbix
+    environment:
+      DB_SERVER_HOST: zabbix-postgres-db_d_srv_h
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      ZBX_JAVAGATEWAY: zabbix-java-gateway-db_d_srv_h
+    depends_on:
+      - zabbix-postgres-db_d_srv_h
+
+  zabbix-postgres-db_d_srv_h:
+    image: postgres:13
+    container_name: zabbix_database_db_d_srv_h
+    restart: unless-stopped
+    networks:
+      - zabbix_db_d_srv_h
+    volumes:
+      - /zabbix_data/dexp/db_d_srv_h/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      POSTGRES_DB: zabbix
+  zabbix-web-db_d_srv_h:
+    image: zabbix/zabbix-web-nginx-pgsql:latest
+    container_name: zabbix_web_db_d_srv_h
+    restart: unless-stopped
+    networks:
+      - zabbix_db_d_srv_h
+    ports:
+      - 8088:8080
+    environment:
+      DB_SERVER_HOST: zabbix-postgres-db_d_srv_h
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      ZBX_SERVER_NAME: Zabbix Server db_d_srv_h
+    depends_on:
+      - zabbix-server-db_d_srv_h
+
+  zabbix-java-gateway-db_d_srv_h:
+    image: zabbix/zabbix-java-gateway:latest
+    container_name: zabbix_java_db_d_srv_h
+    restart: unless-stopped
+    networks:
+      - zabbix_db_d_srv_h
+
+  zabbix-server-db_r_srv_h:
+    image: zabbix/zabbix-server-pgsql:latest
+    container_name: zabbix_server_db_r_srv_h
+    restart: unless-stopped
+    networks:
+      - zabbix_db_r_srv_h
+    volumes:
+      - /zabbix_data/db_r_srv_h/server:/var/lib/zabbix
+    environment:
+      DB_SERVER_HOST: zabbix-postgres-db_r_srv_h
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      ZBX_JAVAGATEWAY: zabbix-java-gateway-db_r_srv_h
+    depends_on:
+      - zabbix-postgres-db_r_srv_h
+
+  zabbix-postgres-db_r_srv_h:
+    image: postgres:13
+    container_name: zabbix_database_db_r_srv_h
+    restart: unless-stopped
+    networks:
+      - zabbix_db_r_srv_h
+    volumes:
+      - /zabbix_data/radeon/db_r_srv_h/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      POSTGRES_DB: zabbix
+  zabbix-web-db_r_srv_h:
+    image: zabbix/zabbix-web-nginx-pgsql:latest
+    container_name: zabbix_web_db_r_srv_h
+    restart: unless-stopped
+    networks:
+      - zabbix_db_r_srv_h
+    ports:
+      - 8089:8080
+    environment:
+      DB_SERVER_HOST: zabbix-postgres-db_r_srv_h
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      ZBX_SERVER_NAME: Zabbix Server db_r_srv_h
+    depends_on:
+      - zabbix-server-db_r_srv_h
+
+  zabbix-java-gateway-db_r_srv_h:
+    image: zabbix/zabbix-java-gateway:latest
+    container_name: zabbix_java_db_r_srv_h
+    restart: unless-stopped
+    networks:
+      - zabbix_db_r_srv_h
+
+networks:
+  zabbix_db_h_srv_h:
+    driver: bridge
+  zabbix_db_n_srv_n:
+    driver: bridge
+  zabbix_db_d_srv_d:
+    driver: bridge
+  zabbix_db_r_srv_r:
+    driver: bridge
+  zabbix_db_h_srv_n:
+    driver: bridge
+  zabbix_db_h_srv_d:
+    driver: bridge
+  zabbix_db_h_srv_r:
+    driver: bridge
+  zabbix_db_n_srv_h:
+    driver: bridge
+  zabbix_db_d_srv_h:
+    driver: bridge
+  zabbix_db_r_srv_h:
+    driver: bridge
