@@ -1,0 +1,60 @@
+version: '3.1'
+services:
+  zabbix-server:
+    image: zabbix/zabbix-server-pgsql:latest
+    container_name: zabbix_server
+    restart: unless-stopped
+    networks:
+      - zabbix_backend
+      - monitoring
+    volumes:
+      - /home/el_monitoro/zabbix/zabbix_server:/var/lib/zabbix
+    environment:
+      DB_SERVER_HOST: zabbix-postgres
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      ZBX_JAVAGATEWAY: zabbix-java-gateway
+    depends_on:
+      - zabbix-postgres
+
+  zabbix-postgres:
+    image: postgres:13
+    container_name: zabbix_database
+    restart: unless-stopped
+    networks:
+      - zabbix_backend
+    volumes:
+      - /zabbix_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      POSTGRES_DB: zabbix
+
+  zabbix-web-nginx:
+    image: zabbix/zabbix-web-nginx-pgsql:latest
+    container_name: zabbix_web
+    restart: unless-stopped
+    networks:
+      - zabbix_backend
+    ports:
+      - 80:8080
+    environment:
+      DB_SERVER_HOST: zabbix-postgres
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pass
+      ZBX_SERVER_NAME: Zabbix Server
+    depends_on:
+      - zabbix-server
+
+  zabbix-java-gateway:
+    image: zabbix/zabbix-java-gateway:latest
+    container_name: zabbix_java_thingy
+    restart: unless-stopped
+    networks:
+      - zabbix_backend
+
+networks:
+  zabbix_backend:
+    external: true
+  monitoring:
+    external: true

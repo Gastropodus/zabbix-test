@@ -1,0 +1,19 @@
+version: '3.1'
+services:
+  zabbix-agent:
+    image: zabbix/zabbix-agent:latest
+    container_name: zabbix_agent
+    restart: unless-stopped
+    networks:
+      - monitoring
+    ports:
+      - 10050:10050
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      ZBX_SERVER_HOST: zabbix-server
+      ZBX_HOSTNAME: zabbix_backend_host
+
+networks:
+  monitoring:
+    external: true
